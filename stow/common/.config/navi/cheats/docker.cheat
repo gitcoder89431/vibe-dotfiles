@@ -1,0 +1,242 @@
+% docker, containers, basics
+
+# List running containers
+docker ps
+
+# List all containers (including stopped)
+docker ps -a
+
+# Run container from image
+docker run <image>
+
+# Run container with name
+docker run --name <name> <image>
+
+# Run container in detached mode
+docker run -d <image>
+
+# Run container with port mapping
+docker run -p <host_port>:<container_port> <image>
+
+# Run container with volume mount
+docker run -v <host_path>:<container_path> <image>
+
+# Run container with environment variable
+docker run -e <VAR>=<value> <image>
+
+# Stop running container
+docker stop <container>
+
+# Start stopped container
+docker start <container>
+
+# Restart container
+docker restart <container>
+
+# Remove container
+docker rm <container>
+
+# Remove all stopped containers
+docker container prune
+
+
+% docker, images
+
+# List all images
+docker images
+
+# Pull image from registry
+docker pull <image>
+
+# Build image from Dockerfile
+docker build -t <tag> .
+
+# Build with custom Dockerfile
+docker build -f <dockerfile> -t <tag> .
+
+# Remove image
+docker rmi <image>
+
+# Remove unused images
+docker image prune
+
+# Remove all unused images
+docker image prune -a
+
+# Tag image
+docker tag <source> <target>
+
+# Push image to registry
+docker push <image>
+
+# View image history
+docker history <image>
+
+
+% docker, exec, logs
+
+# Execute command in running container
+docker exec <container> <command>
+
+# Open interactive shell in container
+docker exec -it <container> /bin/bash
+
+# Open sh shell (for Alpine-based images)
+docker exec -it <container> /bin/sh
+
+# View container logs
+docker logs <container>
+
+# Follow container logs (like tail -f)
+docker logs -f <container>
+
+# View last N lines of logs
+docker logs --tail <lines> <container>
+
+# View logs since timestamp
+docker logs --since <time> <container>
+
+
+% docker, inspect, stats
+
+# View container details
+docker inspect <container>
+
+# View container resource usage
+docker stats
+
+# View stats for specific container
+docker stats <container>
+
+# View container processes
+docker top <container>
+
+# View port mappings
+docker port <container>
+
+
+% docker-compose, compose, orchestration
+
+# Start services
+docker-compose up
+
+# Start services in detached mode
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+
+# View service logs
+docker-compose logs
+
+# Follow service logs
+docker-compose logs -f
+
+# View logs for specific service
+docker-compose logs <service>
+
+# List running services
+docker-compose ps
+
+# Execute command in service
+docker-compose exec <service> <command>
+
+# Build or rebuild services
+docker-compose build
+
+# Restart services
+docker-compose restart
+
+# Pull service images
+docker-compose pull
+
+
+% docker, networks
+
+# List networks
+docker network ls
+
+# Create network
+docker network create <network>
+
+# Remove network
+docker network rm <network>
+
+# Inspect network
+docker network inspect <network>
+
+# Connect container to network
+docker network connect <network> <container>
+
+# Disconnect container from network
+docker network disconnect <network> <container>
+
+
+% docker, volumes
+
+# List volumes
+docker volume ls
+
+# Create volume
+docker volume create <volume>
+
+# Remove volume
+docker volume rm <volume>
+
+# Inspect volume
+docker volume inspect <volume>
+
+# Remove unused volumes
+docker volume prune
+
+
+% docker, system, cleanup
+
+# View docker disk usage
+docker system df
+
+# Remove all unused data (containers, networks, images, cache)
+docker system prune
+
+# Remove all unused data including volumes
+docker system prune -a --volumes
+
+# View system-wide information
+docker info
+
+# View docker version
+docker version
+
+
+% lazydocker, tui
+
+# Open lazydocker TUI
+lazydocker
+
+# Open lazydocker for specific project
+lazydocker -f <compose_file>
+
+
+$ image: docker images --format "{{.Repository}}:{{.Tag}}" | grep -v "<none>"
+$ container: docker ps -a --format "{{.Names}}"
+$ name: echo ""
+$ host_port: echo "3000 8080 5432 6379 27017" | tr ' ' '\n'
+$ container_port: echo "3000 8080 5432 6379 27017" | tr ' ' '\n'
+$ host_path: echo "$(pwd)"
+$ container_path: echo "/app /data /config" | tr ' ' '\n'
+$ VAR: echo "NODE_ENV PORT DATABASE_URL" | tr ' ' '\n'
+$ value: echo ""
+$ tag: echo ""
+$ dockerfile: echo "Dockerfile Dockerfile.dev Dockerfile.prod" | tr ' ' '\n'
+$ source: docker images --format "{{.Repository}}:{{.Tag}}" | grep -v "<none>"
+$ target: echo ""
+$ command: echo "ls pwd env ps" | tr ' ' '\n'
+$ lines: echo "10 50 100 200" | tr ' ' '\n'
+$ time: echo "1m 5m 1h" | tr ' ' '\n'
+$ service: docker-compose config --services 2>/dev/null || echo "web db redis"
+$ network: docker network ls --format "{{.Name}}" | grep -v "bridge\|host\|none"
+$ volume: docker volume ls --format "{{.Name}}"
+$ compose_file: fd -e yml -e yaml | grep -E "(docker-)?compose"

@@ -1,23 +1,36 @@
 # Vibe Dotfiles
 
-A shareable dotfiles setup for a modern macOS workflow, managed with `stow`.
+Opinionated dotfiles for a modern macOS terminal workflow. Managed with `stow`, themed with Catppuccin Mocha.
 
-## What's Inside?
+## Philosophy
 
-This setup includes configurations for:
+Modern CLI tools are better than their ancient counterparts. This setup replaces `ls` with `eza`, `cat` with `bat`, `find` with `fd`, `grep` with `ripgrep`, and `cd` with `zoxide`. You get fuzzy finding, syntax highlighting, smart history, and interactive TUIs.
 
-- **Shell:** Fish (with aliases, `fzf`, `zoxide`)
-- **Prompt:** Starship (Catppuccin Mocha theme)
-- **Terminal:** WezTerm (Catppuccin Mocha theme)
-- **Editor:** Zed (Catppuccin Blurred Mocha theme)
-- **Launcher:** Raycast, Zen Browser
-- **Terminal Tools:**
-  - `broot`: A new way to see and navigate directory trees
-  - `navi`: An interactive cheatsheet tool
-  - `lazygit`: A terminal UI for git
-  - `lazydocker`: A terminal UI for Docker
-  - `fastfetch`: A fast system information tool
-  - `htop`: An interactive process viewer
+## What's Included
+
+**Core Stack:**
+- **Shell:** Fish + Starship prompt
+- **Terminal:** WezTerm
+- **Editor:** Zed
+- **History:** Atuin (magical shell history with search)
+- **Navigation:** Zoxide (smart cd), Broot (tree explorer), FZF (fuzzy finder)
+
+**Modern CLI Tools:**
+- `fd` > find
+- `ripgrep` > grep
+- `eza` > ls
+- `bat` > cat
+- `procs` > ps
+- `duf` > df
+
+**Git & Docker:**
+- `lazygit` - TUI for git (way better than CLI)
+- `lazydocker` - TUI for docker
+
+**Productivity:**
+- `navi` - Interactive cheatsheet tool (150+ commands included)
+- `direnv` - Per-directory environment variables
+- `jq` - JSON processor
 
 ## Screenshots
 
@@ -29,47 +42,58 @@ Here are some screenshots of the setup in action:
 
 > For more details and configuration, see the relevant files in the `stow/` directory.
 
-## Quick Install
+## Installation
 
-An installer script is included to automate the entire setup.
+### Quick Install (Recommended)
 
-**Warning:** The script will install Homebrew packages and modify your default shell. Please review the `install.sh` script before running.
+The installer handles everything: Homebrew packages, symlinks, and shell setup.
 
 ```bash
-# Clone this repository
-git clone https://github.com/YOUR_USERNAME/public-dotfiles.git ~/public-dotfiles
-cd ~/public-dotfiles
+# Clone the repo
+git clone https://github.com/YOUR_USERNAME/vibe-dotfiles.git ~/vibe-dotfiles
+cd ~/vibe-dotfiles
 
-# Run the installer
+# Run the installer (review it first if you want)
 ./install.sh
 ```
 
-**Note:** You will need to replace the git URL with your own once you've pushed this repository to GitHub.
+**What it does:**
+- Installs Homebrew packages (Fish, Starship, Atuin, modern CLI tools, etc.)
+- Installs Nerd Fonts (Fira Code, Meslo)
+- Installs GUI apps (WezTerm, Zed, Raycast, Zen Browser)
+- Creates symlinks via `stow`
+- Sets Fish as your default shell
 
-## Manual Installation
+### Manual Install (If You're Picky)
 
-If you prefer to install things step-by-step:
+```bash
+# Clone the repo
+git clone <your-repo-url> ~/vibe-dotfiles
+cd ~/vibe-dotfiles
 
-1.  **Clone the repository:**
+# Install everything via Homebrew
+brew install fish starship atuin zoxide fzf fd ripgrep eza bat procs duf broot navi lazygit lazydocker fastfetch htop direnv jq
+brew install --cask wezterm zed zen raycast font-fira-code-nerd-font font-meslo-lg-nerd-font
 
-    ```bash
-    git clone <your-repo-url> ~/public-dotfiles
-    ```
+# Symlink the configs
+stow --dir=stow --target=$HOME --restow common mac
 
-2.  **Install the tools:**
-    All required tools can be installed with Homebrew. A `navi` cheatsheet is included with the necessary command.
+# Change shell to Fish
+chsh -s /opt/homebrew/bin/fish
+```
 
-    ```bash
-    # Install navi first
-    brew install navi
+## After Install
 
-    # Use navi to view and run the install command
-    navi
-    ```
+**Restart your terminal.** Then:
 
-3.  **Stow the configurations:**
-    This will create symlinks from this repository to the correct locations in your home directory.
-    ```bash
-    cd ~/public-dotfiles
-    stow --dir=stow --target=$HOME --restow common mac
-    ```
+- Press `Ctrl+R` to search your shell history with Atuin
+- Press `Ctrl+G` to open Navi (search 150+ command examples)
+- Type `z <dir>` to jump to frequently used directories
+- Type `lg` to open lazygit
+- Type `ld` to open lazydocker
+- Use `eza`, `bat`, `fd`, `rg` instead of old tools
+
+**Customize:**
+- Edit `~/.config/fish/config.fish` for environment variables
+- Edit `~/.config/starship.toml` for prompt customization
+- Edit `~/.config/wezterm/wezterm.lua` for terminal settings

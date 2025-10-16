@@ -1,0 +1,374 @@
+# Vibe Dotfiles - LLM Context
+
+> Opinionated macOS terminal dotfiles. Modern CLI tools, TUI workflows, Catppuccin Mocha theme.
+
+## Project Structure
+
+```
+vibe-dotfiles/
+├── stow/
+│   ├── common/              # Cross-platform configs
+│   │   ├── .config/
+│   │   │   ├── fish/        # Shell config
+│   │   │   │   ├── config.fish
+│   │   │   │   └── conf.d/
+│   │   │   │       ├── aliases.fish
+│   │   │   │       ├── atuin.fish    # Shell history
+│   │   │   │       ├── direnv.fish   # Per-dir env
+│   │   │   │       ├── fzf.fish      # Fuzzy finder
+│   │   │   │       └── zoxide.fish   # Smart cd
+│   │   │   ├── starship.toml         # Prompt config
+│   │   │   ├── navi/                 # Interactive cheats
+│   │   │   │   └── cheats/
+│   │   │   │       ├── brew.cheat
+│   │   │   │       ├── git.cheat          # 52 commands
+│   │   │   │       ├── filesystem.cheat   # 60+ commands
+│   │   │   │       ├── docker.cheat       # 70+ commands
+│   │   │   │       └── cli-tools.cheat
+│   │   │   ├── broot/               # Tree navigator
+│   │   │   └── fastfetch/           # System info
+│   │   ├── .gitconfig
+│   │   └── .gitignore_global
+│   └── mac/                 # macOS-specific
+│       └── .config/
+│           ├── wezterm/     # Terminal emulator
+│           └── zed/         # Code editor
+├── install.sh               # Automated installer
+└── README.md                # Human docs
+
+## Philosophy
+
+Replace legacy Unix tools with modern Rust-based alternatives:
+- fd > find (faster, better UX)
+- ripgrep > grep (faster, smarter defaults)
+- eza > ls (colors, icons, git status)
+- bat > cat (syntax highlighting, paging)
+- zoxide > cd (frecency-based jumping)
+- procs > ps (modern process viewer)
+- duf > df (readable disk usage)
+
+Use TUI tools instead of CLI when possible:
+- lazygit > git CLI (visual git interface)
+- lazydocker > docker CLI (container management)
+- broot > tree (interactive navigation)
+- navi > man pages (searchable examples)
+
+## Core Stack
+
+**Shell Environment:**
+- Fish shell (user-friendly, no .bashrc/.zshrc needed)
+- Starship prompt (fast, customizable, shows git/env/time)
+- Atuin (shell history search with Ctrl+R, syncs across machines)
+
+**Navigation:**
+- zoxide (z <dir> jumps to frecent directories)
+- broot (br opens interactive tree)
+- fzf (fuzzy finder for files/history/anything)
+
+**Terminal & Editor:**
+- WezTerm (GPU-accelerated, Lua config)
+- Zed (fast code editor, AI-native)
+
+**Productivity:**
+- navi (Ctrl+G opens 150+ command examples)
+- direnv (auto-load .envrc per directory)
+- jq (JSON processor)
+
+## Key Aliases
+
+**Modern replacements:**
+- ls → eza --icons
+- cat → bat --paging=never
+- grep → rg
+- find → fd
+- vim → nvim
+
+**Git shortcuts:**
+- lg → lazygit (TUI)
+- g → git
+- ga → git add
+- gc → git commit -m
+- gst → git status
+- glog → git log --oneline --graph
+
+**Docker shortcuts:**
+- ld → lazydocker (TUI)
+- d → docker
+- dc → docker compose
+- dps → docker ps
+
+**Navigation:**
+- z <dir> → jump to directory
+- .. → cd ..
+- ... → cd ../..
+
+## Helper Functions
+
+Located in `stow/common/.config/fish/conf.d/aliases.fish`:
+
+- `fe` - Fuzzy find and edit file
+- `rgs <pattern>` - Ripgrep search and edit
+- `mkcd <dir>` - Make directory and cd into it
+- `gcl <repo>` - Git clone and cd into repo
+- `denter` - Fuzzy select and enter docker container
+- `note <text>` - Quick note to ~/notes/notes.txt
+
+## Installation
+
+**Quick install:**
+```bash
+git clone <repo> ~/vibe-dotfiles
+cd ~/vibe-dotfiles
+./install.sh
+```
+
+**What install.sh does:**
+1. Checks for git, Homebrew, installs stow
+2. Installs Nerd Fonts (Fira Code, Meslo)
+3. Installs CLI tools (fish, starship, atuin, fd, rg, eza, bat, etc.)
+4. Installs GUI apps (wezterm, zed, zen browser, raycast)
+5. Runs `stow --dir=stow --target=$HOME --restow common mac`
+6. Sets Fish as default shell
+
+**Manual install:**
+```bash
+brew install fish starship atuin zoxide fzf fd ripgrep eza bat procs duf broot navi lazygit lazydocker fastfetch htop direnv jq
+brew install --cask wezterm zed zen raycast font-fira-code-nerd-font font-meslo-lg-nerd-font
+stow --dir=stow --target=$HOME --restow common mac
+chsh -s /opt/homebrew/bin/fish
+```
+
+## Post-Install Usage
+
+**First steps:**
+- Restart terminal
+- Press Ctrl+R → Atuin history search
+- Press Ctrl+G → Navi command search
+- Type `z <dir>` → Jump to directory
+- Type `lg` → Open lazygit
+- Type `ld` → Open lazydocker
+- Type `fe` → Fuzzy find and edit file
+
+**Customization:**
+- Edit `~/.config/fish/config.fish` for env vars
+- Edit `~/.config/starship.toml` for prompt
+- Edit `~/.config/wezterm/wezterm.lua` for terminal
+
+## Navi Cheatsheets
+
+150+ interactive command examples across 5 files:
+
+**brew.cheat** - Package management
+**git.cheat** - 52 commands:
+- Basics (init, clone, status, log)
+- Staging & commits
+- Branches (create, switch, delete)
+- Remote operations
+- Merge & rebase
+- Stash management
+- Diff & inspect
+- Undo & reset
+
+**filesystem.cheat** - 60+ commands:
+- fd (find files)
+- ripgrep (search content)
+- eza (list files)
+- bat (view files)
+- zoxide (navigation)
+- broot (tree explorer)
+- fzf (fuzzy finder)
+- procs (process viewer)
+- duf (disk usage)
+
+**docker.cheat** - 70+ commands:
+- Container basics
+- Image management
+- Exec & logs
+- Inspect & stats
+- Docker Compose
+- Networks & volumes
+- System cleanup
+- Lazydocker TUI
+
+**cli-tools.cheat** - System tools
+- fastfetch (system info)
+- htop (process viewer)
+
+## Tool Relationships
+
+**Navi commands use these tools:**
+- `git.cheat` → git CLI, dynamic branch/file selection
+- `filesystem.cheat` → fd, rg, eza, bat, zoxide, broot, fzf, procs, duf
+- `docker.cheat` → docker CLI, docker-compose, lazydocker
+
+**Fish integrations:**
+- Atuin (history search)
+- Starship (prompt)
+- Direnv (auto-load env)
+- FZF (fuzzy completion)
+- Zoxide (smart cd)
+
+**TUI workflows:**
+- lazygit replaces most git CLI usage
+- lazydocker replaces most docker CLI usage
+- broot for visual directory navigation
+- navi for command discovery
+
+## Configuration Files
+
+**Shell:**
+- `stow/common/.config/fish/config.fish` - Main config, env vars, PATH
+- `stow/common/.config/fish/conf.d/*.fish` - Modular configs per tool
+
+**Prompt:**
+- `stow/common/.config/starship.toml` - Catppuccin Mocha theme
+
+**Terminal:**
+- `stow/mac/.config/wezterm/wezterm.lua` - Terminal config
+
+**Editor:**
+- `stow/mac/.config/zed/settings.json` - Zed editor config
+
+**Git:**
+- `stow/common/.gitconfig` - Git settings
+- `stow/common/.gitignore_global` - Global ignores
+
+**Navi:**
+- `stow/common/.config/navi/config.yaml` - Navi settings
+- `stow/common/.config/navi/cheats/*.cheat` - Command examples
+
+**Broot:**
+- `stow/common/.config/broot/conf.hjson` - Broot config
+- `stow/common/.config/broot/skins/catppuccin-mocha.hjson` - Theme
+
+## Dependencies
+
+**Required:**
+- macOS (Intel or Apple Silicon)
+- Homebrew
+- Git
+- Stow
+
+**Installed by install.sh:**
+- All CLI tools and GUI apps listed above
+
+## Theme
+
+Catppuccin Mocha throughout:
+- Starship prompt
+- WezTerm terminal
+- Zed editor
+- Broot file tree
+
+Colors: warm, low-contrast, easy on eyes for long sessions.
+
+## Keybindings
+
+**Shell (Fish + Atuin + FZF):**
+- Ctrl+R - Atuin history search
+- Ctrl+T - FZF file search
+- Alt+C - FZF directory search
+
+**Navi:**
+- Ctrl+G - Open navi (configured in fish)
+
+**Zoxide:**
+- z <query> - Jump to directory
+- zi <query> - Interactive jump
+
+**TUI apps:**
+- lg (lazygit) - Full git interface
+- ld (lazydocker) - Full docker interface
+- br (broot) - File tree navigation
+
+## Maintenance
+
+**Update packages:**
+```bash
+brew update && brew upgrade
+```
+
+**Update navi cheats:**
+Edit files in `stow/common/.config/navi/cheats/`
+
+**Add new aliases:**
+Edit `stow/common/.config/fish/conf.d/aliases.fish`
+
+**Restow after changes:**
+```bash
+cd ~/vibe-dotfiles
+stow --dir=stow --target=$HOME --restow common mac
+```
+
+## Design Principles
+
+1. **Use stow for symlinks** - Single source of truth, easy to version control
+2. **Separate common/mac** - Portable to Linux if needed
+3. **Modern > legacy** - Rust tools > old Unix tools
+4. **TUI > CLI** - Visual interfaces when available
+5. **Searchable examples > man pages** - Navi over reading docs
+6. **One theme everywhere** - Catppuccin Mocha consistency
+7. **Fast startup** - Fish + Starship = <100ms shell init
+8. **Opinionated defaults** - Make choices, don't present options
+
+## Extension Points
+
+**Add new tools:**
+1. Install via Homebrew
+2. Add config to `stow/common/.config/<tool>/`
+3. Add init to `stow/common/.config/fish/conf.d/<tool>.fish`
+4. Add aliases to `aliases.fish`
+5. Create navi cheat if useful
+
+**Add platform-specific config:**
+1. Create `stow/<platform>/.config/<tool>/`
+2. Update stow command to include platform
+
+**Sync to new machine:**
+```bash
+git clone <repo> ~/vibe-dotfiles
+cd ~/vibe-dotfiles
+./install.sh
+```
+
+## File Paths Reference
+
+After stow, configs live at:
+- Shell: `~/.config/fish/`
+- Prompt: `~/.config/starship.toml`
+- Terminal: `~/.config/wezterm/`
+- Editor: `~/.config/zed/`
+- Navi: `~/.config/navi/`
+- Git: `~/.gitconfig`
+- Notes: `~/notes/notes.txt` (created by `note` function)
+
+## LLM Assistant Usage
+
+When helping users with this setup:
+1. All configs are stowed from `~/vibe-dotfiles/stow/`
+2. Edit source files, then `stow --restow` to apply
+3. Fish shell uses `conf.d/` pattern for modular configs
+4. Aliases in `aliases.fish` override default commands
+5. Navi cheats are executable - suggest `Ctrl+G` to search
+6. TUI tools (lg, ld) are preferred over CLI for complex operations
+7. Theme is Catppuccin Mocha - maintain consistency when adding tools
+
+## Common Tasks
+
+**Add git alias:**
+Edit `stow/common/.config/fish/conf.d/aliases.fish`, add under `# === Git Aliases ===`
+
+**Add navi command:**
+Edit relevant `.cheat` file in `stow/common/.config/navi/cheats/`
+
+**Change prompt:**
+Edit `stow/common/.config/starship.toml`
+
+**Add environment variable:**
+Edit `stow/common/.config/fish/config.fish` under `# === Environment Variables ===`
+
+**Change terminal theme:**
+Edit `stow/mac/.config/wezterm/wezterm.lua`
+
+**Add Fish function:**
+Edit `stow/common/.config/fish/conf.d/aliases.fish` under `# === Helper Functions ===`

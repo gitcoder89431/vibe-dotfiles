@@ -1,0 +1,173 @@
+% git, version-control, basics
+
+# Initialize a new git repository
+git init
+
+# Clone a repository
+git clone <repo_url>
+
+# Check repository status
+git status
+
+# View commit history
+git log --oneline --graph --all
+
+# View detailed commit history
+git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+
+% git, staging, commits
+
+# Stage all changes
+git add .
+
+# Stage specific file
+git add <file>
+
+# Commit with message
+git commit -m "<message>"
+
+# Amend last commit (change message or add files)
+git commit --amend
+
+# Unstage a file (keep changes)
+git restore --staged <file>
+
+# Discard changes in working directory
+git restore <file>
+
+
+% git, branches
+
+# List all branches
+git branch -a
+
+# Create new branch
+git branch <branch_name>
+
+# Switch to branch
+git checkout <branch_name>
+
+# Create and switch to new branch
+git checkout -b <branch_name>
+
+# Delete local branch
+git branch -d <branch_name>
+
+# Delete remote branch
+git push origin --delete <branch_name>
+
+# Rename current branch
+git branch -m <new_name>
+
+
+% git, remote
+
+# View remote repositories
+git remote -v
+
+# Add remote repository
+git remote add origin <repo_url>
+
+# Fetch from remote (doesn't merge)
+git fetch origin
+
+# Pull from remote (fetch + merge)
+git pull origin <branch_name>
+
+# Push to remote
+git push origin <branch_name>
+
+# Push and set upstream
+git push -u origin <branch_name>
+
+
+% git, merge, rebase
+
+# Merge branch into current branch
+git merge <branch_name>
+
+# Rebase current branch onto another
+git rebase <branch_name>
+
+# Continue rebase after resolving conflicts
+git rebase --continue
+
+# Abort rebase
+git rebase --abort
+
+# Interactive rebase (squash, reword, etc.)
+git rebase -i HEAD~<number>
+
+
+% git, stash
+
+# Stash current changes
+git stash
+
+# Stash with message
+git stash save "<message>"
+
+# List all stashes
+git stash list
+
+# Apply most recent stash (keep stash)
+git stash apply
+
+# Apply and remove most recent stash
+git stash pop
+
+# Apply specific stash
+git stash apply stash@{<n>}
+
+# Drop specific stash
+git stash drop stash@{<n>}
+
+
+% git, diff, inspect
+
+# View unstaged changes
+git diff
+
+# View staged changes
+git diff --cached
+
+# View changes between branches
+git diff <branch1>..<branch2>
+
+# Show changes in a specific commit
+git show <commit_hash>
+
+# Search commits by message
+git log --grep="<pattern>"
+
+# Find who changed a line (blame)
+git blame <file>
+
+
+% git, undo, reset
+
+# Undo last commit (keep changes staged)
+git reset --soft HEAD~1
+
+# Undo last commit (keep changes unstaged)
+git reset HEAD~1
+
+# Undo last commit (discard changes) ⚠️ DESTRUCTIVE
+git reset --hard HEAD~1
+
+# Revert a commit (creates new commit)
+git revert <commit_hash>
+
+# Restore file to specific commit
+git checkout <commit_hash> -- <file>
+
+
+$ repo_url: echo "https://github.com/user/repo.git"
+$ file: git ls-files
+$ branch_name: git branch -a | sed 's/\*//' | sed 's/remotes\/origin\///' | awk '{print $1}' | sort -u
+$ message: echo ""
+$ commit_hash: git log --oneline | awk '{print $1}'
+$ n: echo "0 1 2 3 4 5" | tr ' ' '\n'
+$ number: echo "2 3 5 10" | tr ' ' '\n'
+$ pattern: echo ""

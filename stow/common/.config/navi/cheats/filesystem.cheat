@@ -1,0 +1,235 @@
+% fd, find, search
+
+# Find files by name
+fd <name>
+
+# Find files by extension
+fd -e <extension>
+
+# Find files in specific directory
+fd <name> <path>
+
+# Find directories only
+fd --type d <name>
+
+# Find files only
+fd --type f <name>
+
+# Find hidden files too
+fd --hidden <name>
+
+# Find and execute command on results
+fd <name> --exec <command>
+
+# Find files modified in last N days
+fd --changed-within <days>d
+
+# Exclude directory from search
+fd --exclude <dir> <name>
+
+
+% ripgrep, rg, grep, search
+
+# Search for pattern in current directory
+rg "<pattern>"
+
+# Search case-insensitively
+rg -i "<pattern>"
+
+# Search only in specific file types
+rg --type <filetype> "<pattern>"
+
+# Search with context lines (before and after)
+rg -C <lines> "<pattern>"
+
+# Search for whole word only
+rg -w "<pattern>"
+
+# List files that contain pattern
+rg -l "<pattern>"
+
+# Count matches per file
+rg -c "<pattern>"
+
+# Search hidden files too
+rg --hidden "<pattern>"
+
+# Search with line numbers
+rg -n "<pattern>"
+
+# Search and replace preview (doesn't modify files)
+rg "<pattern>" --replace "<replacement>"
+
+
+% eza, ls, list
+
+# List files (basic)
+eza
+
+# List with details (permissions, size, date)
+eza -l
+
+# List all files including hidden
+eza -a
+
+# List with tree view
+eza --tree
+
+# List with tree view (limit depth)
+eza --tree --level=<depth>
+
+# List sorted by modification time
+eza -l --sort=modified
+
+# List sorted by size
+eza -l --sort=size
+
+# List with git status
+eza -l --git
+
+# List with file icons
+eza --icons
+
+# List directories only
+eza -D
+
+
+% bat, cat, view
+
+# View file with syntax highlighting
+bat <file>
+
+# View file with line numbers
+bat -n <file>
+
+# View multiple files
+bat <file1> <file2>
+
+# View with git changes highlighted
+bat --diff <file>
+
+# View without paging (for small files)
+bat --paging=never <file>
+
+# View specific language syntax
+bat --language=<lang> <file>
+
+# View with plain style (no decorations)
+bat --style=plain <file>
+
+
+% zoxide, z, cd, navigate
+
+# Jump to most frecent directory matching query
+z <query>
+
+# Jump to directory interactive (if multiple matches)
+zi <query>
+
+# Add current directory to zoxide database
+zoxide add .
+
+# Remove directory from database
+zoxide remove <path>
+
+# Query the database
+zoxide query <query>
+
+# Query and list all matches
+zoxide query -l <query>
+
+
+% broot, br, tree, navigate
+
+# Open broot in current directory
+br
+
+# Open broot at specific path
+br <path>
+
+# View sizes of directories
+br --sizes
+
+# View with git status
+br --git-status
+
+# Search in broot (type / then search term)
+br
+
+# Open file in default editor (type :e in broot)
+br
+
+
+% fzf, fuzzy, interactive
+
+# Fuzzy find file and open in editor
+$EDITOR (fd --type f | fzf)
+
+# Fuzzy search command history
+history | fzf
+
+# Fuzzy find directory and cd into it
+cd (fd --type d | fzf)
+
+# Fuzzy search with preview
+fd --type f | fzf --preview 'bat --color=always {}'
+
+# Multi-select files (use Tab to select)
+fd --type f | fzf --multi
+
+# Fuzzy search processes
+ps aux | fzf
+
+
+% procs, ps, processes
+
+# List all processes
+procs
+
+# Search for process by name
+procs <name>
+
+# Show process tree
+procs --tree
+
+# Watch processes (auto-refresh)
+procs --watch
+
+# Sort by CPU usage
+procs --sortd cpu
+
+# Sort by memory usage
+procs --sortd mem
+
+
+% duf, df, disk
+
+# Show disk usage (all disks)
+duf
+
+# Show disk usage for specific path
+duf <path>
+
+# Show disk usage (hide loops and binds)
+duf --hide-special
+
+# Show disk usage as JSON
+duf --json
+
+
+$ name: echo ""
+$ extension: echo "js ts py md txt json" | tr ' ' '\n'
+$ path: fd --type d
+$ command: echo "rm cat bat" | tr ' ' '\n'
+$ days: echo "1 7 14 30" | tr ' ' '\n'
+$ dir: echo "node_modules .git target build" | tr ' ' '\n'
+$ pattern: echo ""
+$ filetype: echo "js py rust go md" | tr ' ' '\n'
+$ lines: echo "2 3 5 10" | tr ' ' '\n'
+$ replacement: echo ""
+$ file: fd --type f
+$ file1: fd --type f
+$ file2: fd --type f
+$ depth: echo "2 3 4 5" | tr ' ' '\n'
+$ lang: echo "javascript python rust go markdown json" | tr ' ' '\n'
+$ query: echo ""

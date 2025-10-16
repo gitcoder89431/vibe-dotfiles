@@ -7,12 +7,12 @@ set -gx EDITOR "code --wait"
 set -gx VISUAL "code --wait"
 set -gx ALTERNATE_EDITOR "nvim"
 
-# XDG Base Directories
+# XDG Base Directories (standard locations for config/data/cache)
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 
-# Project Directories
+# Project Directories (customize these to match your folder structure)
 set -gx NOTES_DIR "$HOME/notes"
 set -gx PROJECTS_DIR "$HOME/projects"
 set -gx SCRIPTS_DIR "$HOME/.local/bin"
@@ -47,4 +47,3 @@ test -f "$HOME/.config/fish/config.local.fish" && source "$HOME/.config/fish/con
 if status --is-interactive
     echo "🤖 Fish shell initialized"
 end
-fish_add_path ~/dotfiles/scripts

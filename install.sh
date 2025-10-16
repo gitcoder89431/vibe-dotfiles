@@ -24,8 +24,8 @@ main() {
     # Install Nerd Font
     brew install --cask font-fira-code-nerd-font font-meslo-lg-nerd-font
 
-    # Install CLI tools, GUI Apps, and Sketchybar
-    brew install fish starship atuin zoxide fzf fd ripgrep eza bat procs duf broot navi lazygit lazydocker fastfetch htop jq
+    # Install CLI tools and GUI Apps
+    brew install fish starship atuin zoxide fzf fd ripgrep eza bat procs duf broot navi lazygit lazydocker fastfetch htop direnv jq
     brew install --cask wezterm zed zen raycast
 
     info "All packages installed."

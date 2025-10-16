@@ -50,6 +50,7 @@ alias dlog="docker logs -f"
 
 # === Tools ===
 alias lg="lazygit"
+alias ld="lazydocker"
 alias br="broot"
 alias preview="glow"
 alias vim="nvim"
@@ -99,21 +100,13 @@ function denter
     test -n "$container" && docker exec -it "$container" /bin/bash
 end
 
-# note - Quick note with jrnl
+# note - Quick note taking
 function note
     if test (count $argv) -eq 0
-        jrnl
+        echo "Usage: note <text>"
+        echo "Example: note 'Fixed the bug in user auth'"
     else
-        jrnl "$argv"
+        echo "[(date '+%Y-%m-%d %H:%M')] $argv" >> ~/notes/notes.txt
+        echo "Note saved!"
     end
 end
-
-# RUIXEN context search aliases
-alias sr='search-ruixen'
-alias gc='grep-context'
-alias rgc='rg -C 5'
-
-# Power combo aliases
-alias vn='view-notes'
-alias on='open-note'
-alias sum='summarize-today'
