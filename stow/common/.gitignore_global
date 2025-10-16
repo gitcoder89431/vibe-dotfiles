@@ -1,0 +1,9 @@
+# Global .gitignore
+# Target: common
+# Agent: Gemini
+# Version: 1.0
+#
+# Patterns to ignore in all git repositories.
+# Example:
+# .DS_Store
+# *.log

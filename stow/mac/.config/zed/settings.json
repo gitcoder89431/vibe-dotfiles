@@ -1,0 +1,72 @@
+{
+  // ═══════════════════════════════════════════════════
+  // Zed Editor Configuration
+  // ═══════════════════════════════════════════════════
+
+  // ═══════════════════════════════════════════════════
+  // Theme & Appearance
+  // ═══════════════════════════════════════════════════
+  "theme": "Catppuccin Mocha (Blur)",
+  "icon_theme": "Catppuccin Macchiato",
+  "ui_font_size": 15,
+  "buffer_font_size": 14,
+  "buffer_font_family": ".ZedMono",
+
+  // ═══════════════════════════════════════════════════
+  // Editor Settings
+  // ═══════════════════════════════════════════════════
+  "relative_line_numbers": true,
+  "base_keymap": "VSCode",
+  "vim_mode": false,
+
+  // ═══════════════════════════════════════════════════
+  // Panel Layout
+  // ═══════════════════════════════════════════════════
+  "project_panel": {
+    "button": true,
+    "dock": "left",
+    "git_status": true
+  },
+
+  "chat_panel": {
+    "dock": "left"
+  },
+
+  // ═══════════════════════════════════════════════════
+  // Terminal
+  // ═══════════════════════════════════════════════════
+  "terminal": {
+    "font_family": ".ZedMono",
+    "env": {
+      "EDITOR": "zed --wait"
+    }
+  },
+
+  // ═══════════════════════════════════════════════════
+  // File Exclusions
+  // ═══════════════════════════════════════════════════
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/Thumbs.db",
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "**/out",
+    "**/target",
+    "**/.next",
+    "**/__pycache__",
+    "**/coverage"
+  ],
+
+  // ═══════════════════════════════════════════════════
+  // Privacy & Telemetry
+  // ═══════════════════════════════════════════════════
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  }
+}

@@ -1,0 +1,155 @@
+
+format = """[](color_orange)$os$username[](bg:sapphire fg:color_orange)$directory[](fg:sapphire bg:color_aqua)$git_branch$git_status[](fg:color_aqua bg:peach)$c$rust$golang$nodejs$php$java$kotlin$haskell$python[](fg:peach bg:color_bg3)$docker_context$conda[](fg:color_bg3 bg:color_bg1)[ ](fg:color_bg1)$line_break$character"""
+
+palette = 'catppuccin_mocha'
+
+[os]
+disabled = false
+style = "bg:color_orange fg:base"
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = "󰀵"
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[username]
+show_always = true
+style_user = "bg:color_orange fg:base"
+style_root = "bg:color_orange fg:base"
+format = '[ $user ]($style)'
+
+[directory]
+style = "fg:base bg:sapphire"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[git_branch]
+symbol = ""
+style = "bg:color_aqua"
+format = '[[ $symbol $branch ](fg:base bg:color_aqua)]($style)'
+
+[git_status]
+style = "bg:color_aqua"
+format = '[[($all_status$ahead_behind )](fg:base bg:color_aqua)]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[c]
+symbol = " "
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[php]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[java]
+symbol = " "
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[kotlin]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[python]
+symbol = ""
+style = "bg:peach"
+format = '[[ $symbol( $version) ](fg:base bg:peach)]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:color_bg3 fg:text"
+format = '[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'
+
+[conda]
+style = "bg:color_bg3"
+format = '[[ $symbol( $environment) ](fg:#83a598 bg:color_bg3)]($style)'
+
+[line_break]
+disabled = false
+
+[character]
+disabled = false
+success_symbol = '[](bold fg:color_green)'
+error_symbol = '[](bold fg:color_red)'
+vimcmd_symbol = '[](bold fg:color_green)'
+vimcmd_replace_one_symbol = '[](bold fg:color_purple)'
+vimcmd_replace_symbol = '[](bold fg:color_purple)'
+vimcmd_visual_symbol = '[](bold fg:sapphire)'
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+color_orange = "#cba6f7"
+color_red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+color_yellow = "#f9e2af"
+color_green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+color_blue = "#89b4fa"
+color_aqua = "#94e2d5"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+color_bg3 = "#45475a"
+color_bg1 = "#313244"
+color_fg0 = "#cdd6f4"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"

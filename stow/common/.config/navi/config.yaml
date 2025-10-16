@@ -1,0 +1,4 @@
+# navi configuration
+# Disables the default community cheatsheets to only show personal ones.
+cheats:
+  repositories: []

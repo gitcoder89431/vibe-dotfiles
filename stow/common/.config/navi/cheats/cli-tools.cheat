@@ -1,0 +1,18 @@
+% cli, tools, system
+
+# System Information
+
+# Fast and feature-rich system information tool
+fastfetch
+
+# Interactive process viewer
+htop
+
+
+% tui, git, docker
+
+# Terminal UI for Git
+lazygit
+
+# Terminal UI for Docker
+lazydocker

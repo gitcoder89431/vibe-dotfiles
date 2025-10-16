@@ -1,0 +1,13 @@
+% brew, package-manager, install
+
+# Tap cask for fonts
+brew tap homebrew/cask-fonts
+
+# Install Nerd Font (Fira Code)
+brew install --cask font-fira-code-nerd-font
+
+# Install core CLI tools
+brew install fish starship atuin zoxide fzf fd ripgrep eza bat procs duf broot navi lazygit lazydocker fastfetch htop sketchybar
+
+# Install Cask Applications
+brew install --cask zen raycast

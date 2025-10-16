@@ -1,0 +1,62 @@
+###############################################################
+# This configuration file lets you
+# - define new commands
+# - change the shortcut or triggering keys of built-in verbs
+# - change the colors
+# - set default values for flags
+# - set special behaviors on specific paths
+# - and more...
+#
+# Configuration documentation is available at
+#     https://dystroy.org/broot
+#
+# This file's format is Hjson ( https://hjson.github.io/ ). Some
+# properties are commented out. To enable them, remove the `#`.
+#
+###############################################################
+
+# show git related info
+default_flags: "g"
+
+# Whether to mark the selected line with a triangle
+show_selection_mark: true
+
+# If you want to display icons in broot, uncomment this line
+icon_theme: vscode
+
+
+# Quit on last cancel
+quit_on_last_cancel: true
+
+
+###############################################################
+# Imports
+#
+# While it's possible to have all configuration in one file,
+# it's more convenient to split it in several ones.
+# Importing also allows to set a condition on the terminal's
+# color, which makes it possible to have a different skin 
+# chosen when your terminal has a light background and when
+# it has a light one.
+imports: [
+
+    # Verbs are better configured in verbs.hjson. But you
+    # can also add another files for your personal verbs
+    verbs.hjson
+
+    # This file contains the skin to use when the terminal
+    # is dark (or when this couldn't be determined)
+    {
+        luma: [
+            dark
+            unknown
+        ]
+        file: skins/catppuccin-mocha.hjson
+    }
+
+    # This skin is imported when your terminal is light
+    {
+        luma: light
+        file: skins/white.hjson
+    }
+]
