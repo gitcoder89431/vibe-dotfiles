@@ -18,7 +18,6 @@ This setup includes configurations for:
   - `lazydocker`: A terminal UI for Docker
   - `fastfetch`: A fast system information tool
   - `htop`: An interactive process viewer
-  - `copilot`: Copilot CLI, a terminal-based AI assistant
 
 ## Screenshots
 
@@ -26,6 +25,7 @@ Here are some screenshots of the setup in action:
 
 ![Screenshot 1](./screenshot_01.png)
 ![Screenshot 2](./screenshot_02.png)
+![Screenshot 3](./screenshot_03.png)
 
 > For more details and configuration, see the relevant files in the `stow/` directory.
 
