@@ -1,5 +1,9 @@
-# Vibe Dotfiles
-
+ _    __ _  __                  ____          __   ____ _  __           
+| |  / /(_)/ /_   ___          / __ \ ____   / /_ / __/(_)/ /___   _____
+| | / // // __ \ / _ \ ______ / / / // __ \ / __// /_ / // // _ \ / ___/
+| |/ // // /_/ //  __//_____// /_/ // /_/ // /_ / __// // //  __/(__  ) 
+|___//_//_.___/ \___/       /_____/ \____/ \__//_/  /_//_/ \___//____/  
+                                                                        
 Opinionated dotfiles for a modern macOS terminal workflow. Managed with `stow`, themed with Catppuccin Mocha.
 
 ## Philosophy
