@@ -1,5 +1,4 @@
-    # Vibe-Dotfiles
-    ---
+### Vibe-Dotfiles
 
 Opinionated dotfiles for a modern macOS terminal workflow. Managed with `stow`, themed with Catppuccin Mocha.## Philosophy
 
