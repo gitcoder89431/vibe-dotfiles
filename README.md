@@ -1,9 +1,10 @@
- _    __ _  __                  ____          __   ____ _  __           
-| |  / /(_)/ /_   ___          / __ \ ____   / /_ / __/(_)/ /___   _____
-| | / // // __ \ / _ \ ______ / / / // __ \ / __// /_ / // // _ \ / ___/
-| |/ // // /_/ //  __//_____// /_/ // /_/ // /_ / __// // //  __/(__  ) 
-|___//_//_.___/ \___/       /_____/ \____/ \__//_/  /_//_/ \___//____/  
-                                                                        
+---
+
+\ \ / /\_ _| ** )| \_\_**| | _ \ / _ \_ _| **_|_ \_| | | \_\_**/ **_|
+\ \ / / | || _ \| _| | | | | | | || | | |_ | || | | \_| \_** \
+\ V / | || |\_) | |**_ | |_| | |_| || | | _| | || |\_**| |**\_ \_**) |
+\_/ |**\_|\_\_**/|**\_**| |\_**\_/ \_**/ |_| |_| |**\_|\_\_\_**|**\_**|\_\_\_\_/
+
 Opinionated dotfiles for a modern macOS terminal workflow. Managed with `stow`, themed with Catppuccin Mocha.
 
 ## Philosophy
@@ -13,6 +14,7 @@ Modern CLI tools are better than their ancient counterparts. This setup replaces
 ## What's Included
 
 **Core Stack:**
+
 - **Shell:** Fish + Starship prompt
 - **Terminal:** WezTerm
 - **Editor:** Zed
@@ -20,6 +22,7 @@ Modern CLI tools are better than their ancient counterparts. This setup replaces
 - **Navigation:** Zoxide (smart cd), Broot (tree explorer), FZF (fuzzy finder)
 
 **Modern CLI Tools:**
+
 - `fd` > find
 - `ripgrep` > grep
 - `eza` > ls
@@ -28,10 +31,12 @@ Modern CLI tools are better than their ancient counterparts. This setup replaces
 - `duf` > df
 
 **Git & Docker:**
+
 - `lazygit` - TUI for git (way better than CLI)
 - `lazydocker` - TUI for docker
 
 **Productivity:**
+
 - `navi` - Interactive cheatsheet tool (150+ commands included)
 - `direnv` - Per-directory environment variables
 - `jq` - JSON processor
@@ -62,6 +67,7 @@ cd ~/vibe-dotfiles
 ```
 
 **What it does:**
+
 - Installs Homebrew packages (Fish, Starship, Atuin, modern CLI tools, etc.)
 - Installs Nerd Fonts (Fira Code, Meslo)
 - Installs GUI apps (WezTerm, Zed, Raycast, Zen Browser)
@@ -98,6 +104,7 @@ chsh -s /opt/homebrew/bin/fish
 - Use `eza`, `bat`, `fd`, `rg` instead of old tools
 
 **Customize:**
+
 - Edit `~/.config/fish/config.fish` for environment variables
 - Edit `~/.config/starship.toml` for prompt customization
 - Edit `~/.config/wezterm/wezterm.lua` for terminal settings
