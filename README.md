@@ -1,7 +1,9 @@
-### Vibe-Dotfiles
+# Vibe Dotfiles
 
 
-Opinionated dotfiles for a modern macOS terminal workflow. Managed with `stow`, themed with Catppuccin Mocha.## Philosophy
+Opinionated dotfiles for a modern macOS terminal workflow. Managed with `stow`, themed with Catppuccin Mocha.
+
+## Philosophy
 
 Modern CLI tools are better than their ancient counterparts. This setup replaces `ls` with `eza`, `cat` with `bat`, `find` with `fd`, `grep` with `ripgrep`, and `cd` with `zoxide`. You get fuzzy finding, syntax highlighting, smart history, and interactive TUIs.
 
