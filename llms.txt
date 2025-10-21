@@ -372,3 +372,495 @@ Edit `stow/mac/.config/wezterm/wezterm.lua`
 
 **Add Fish function:**
 Edit `stow/common/.config/fish/conf.d/aliases.fish` under `# === Helper Functions ===`
+
+## Ruixen - Natural Language Command Translator
+
+**Location:** `stow/common/.config/ruixen/`
+
+Privacy-first natural language → shell command translator. 100% local processing via Ollama. No API keys, no cloud.
+
+### Architecture
+
+```
+User query → ruixen.fish → translate.py → Ollama (localhost) → JSON response → display/execute
+                                ↓ (if Ollama down)
+                            navi --query fallback
+```
+
+### Files
+
+```
+stow/common/.config/ruixen/
+├── README.md           # User manual (285 words, 1-2 min read)
+├── config.yaml         # Local-only config (no cloud API options)
+├── translate.py        # Python translator (Ollama-only, ~300 lines)
+├── setup.sh            # Dependency setup script
+└── prompts/
+    └── system.txt      # LLM system prompt (privacy-aware)
+
+stow/common/.config/fish/functions/
+└── ruixen.fish         # Main command interface
+```
+
+### Core Components
+
+**1. Fish Function (`ruixen.fish`)**
+- Entry point, handles all user interaction
+- Parses flags: `--run`, `--navi`, `--history`
+- Calls Python translator for direct mode
+- Falls back to navi if translator fails
+- Displays results with syntax highlighting (bat)
+- Asks for confirmation before execution
+
+**2. Python Translator (`translate.py`)**
+- Local-only processing (no cloud APIs)
+- Context gathering: pwd, git status, project type (Dockerfile, package.json, etc.)
+- Cache system: MD5 hash of query+context, 1hr TTL
+- Ollama API calls: localhost:11434, JSON format, temperature 0.1
+- Safety checks: blacklisted binaries, dangerous patterns
+- Returns JSON: {command, explanation, navi_query, requires_confirmation, confidence}
+
+**3. Configuration (`config.yaml`)**
+- LLM settings: endpoint (localhost:11434), model (qwen2.5:0.5b), timeout, temperature
+- Safety: blacklisted_binaries, dangerous_patterns, require_manual_approval
+- Context: include_pwd, include_git_status, include_project_type
+- Cache: enabled, ttl, max_size
+- Fallback: use_navi_search, suggest_alternatives
+
+**4. System Prompt (`prompts/system.txt`)**
+- Instructs LLM to translate natural language to commands
+- Prefers modern CLI tools: fd, rg, eza, bat, procs, duf
+- Returns strict JSON format
+- Sets requires_confirmation=true for dangerous ops
+- Includes context awareness rules
+
+### Three Modes
+
+**Direct Mode (default):**
+```bash
+ruixen "find files with dog in name"
+# → Calls Ollama → Returns: fd dog
+# → Shows preview, asks to run/copy/cancel
+```
+
+**Navi Mode:**
+```bash
+ruixen --navi "docker logs"
+# → Opens: navi --query "docker logs"
+# → Interactive cheat selection
+```
+
+**History Mode:**
+```bash
+ruixen --history "git command"
+# → Searches: atuin search "git command"
+# → Or: history search --contains "git command" | fzf
+```
+
+### Context Awareness
+
+Translator gathers context before calling LLM:
+- `pwd`: Current directory path
+- `in_git_repo`: Boolean, checks git rev-parse
+- `git_branch`: If in repo, current branch name
+- `has_dockerfile`: Detects Dockerfile presence
+- `has_docker_compose`: Detects docker-compose.yml/yaml
+- `has_package_json`: Detects Node.js project
+- `has_requirements_txt`: Detects Python project
+- `has_cargo_toml`: Detects Rust project
+- `has_go_mod`: Detects Go project
+
+Context passed to LLM in prompt:
+```
+Context: pwd=/Users/dev/my-app, in_git_repo=true, git_branch=main, has_dockerfile=true
+User request: show logs
+→ LLM suggests: docker-compose logs (context-aware)
+```
+
+### Caching System
+
+**Cache key:** MD5(query + pwd + in_git_repo)
+
+**Location:** `~/.config/ruixen/cache/<hash>.json`
+
+**TTL:** 3600 seconds (1 hour) by default
+
+**Validation:** Checks file mtime vs TTL, auto-deletes expired
+
+**Benefits:**
+- First query: ~2-3 seconds (LLM inference)
+- Cached query: ~0.1 seconds (instant)
+
+### Safety Mechanisms
+
+**1. Blacklisted Binaries:**
+```yaml
+blacklisted_binaries: [rm, dd, mkfs, fdisk, parted, shred, format, diskutil, sudo rm, sudo dd]
+```
+
+**2. Dangerous Patterns:**
+```yaml
+dangerous_patterns: ["rm -rf", "rm -fr", "dd if=", "> /dev/", "chmod -R 777", "chown -R", "sudo rm"]
+```
+
+**3. Manual Approval Required:**
+```yaml
+require_manual_approval: ["curl.*|.*sh", "wget.*|.*sh", "curl.*|.*bash", "wget.*|.*bash", "eval", "exec"]
+```
+
+**4. Confirmation Flow:**
+- If requires_confirmation=true OR danger_warning=true
+- Fish function displays: "⚠️ This command requires confirmation. Run it? [y/N]"
+- User must type 'y' to proceed
+- Any other input cancels execution
+
+### Ollama Integration
+
+**Endpoint:** http://localhost:11434 (localhost only, no external network)
+
+**API Call:**
+```python
+payload = {
+    "model": "qwen2.5:0.5b",
+    "prompt": f"{system_prompt}\n\n{context}\n\nUser request: {query}",
+    "stream": False,
+    "format": "json",
+    "options": {
+        "temperature": 0.1,
+        "num_predict": 150
+    }
+}
+# POST to /api/generate
+```
+
+**Response Parsing:**
+- Expects JSON: {command, explanation, navi_query, requires_confirmation, confidence}
+- Handles markdown code blocks: strips ```json and ``` if present
+- On failure: URLError, JSONDecodeError → fallback to navi
+
+### Fallback Mechanism
+
+**Trigger:** Ollama server not responding OR invalid LLM response
+
+**Action:** Automatically runs `navi --query "{user_query}"`
+
+**Response:**
+```json
+{
+    "command": "navi --query 'user query'",
+    "explanation": "LLM unavailable, searching navi for: user query",
+    "navi_query": "user query",
+    "requires_confirmation": false,
+    "confidence": 0.5,
+    "is_fallback": true
+}
+```
+
+### Privacy-First Design
+
+**Why local-only matters:**
+- Command history may contain: passwords, API keys, secrets, tokens
+- Directory paths reveal: project structure, client names, business info
+- Git repos expose: private repo names, branch names, commit messages
+- System info reveals: tools, configurations, infrastructure
+
+**What was removed:**
+- OpenAI API support (would send data to OpenAI)
+- Anthropic API support (would send data to Anthropic)
+- Any cloud LLM providers
+- Telemetry code
+- Analytics code
+- External network calls (except localhost:11434)
+
+**Guarantees:**
+- All LLM processing via Ollama on localhost
+- Cache stored locally: `~/.config/ruixen/cache/`
+- No external API keys needed or stored
+- No data transmission to external servers
+- Fully functional offline (after model download)
+
+### Modern CLI Tool Preferences
+
+Ruixen knows and suggests modern alternatives:
+
+**File operations:**
+- `fd` instead of `find`
+- `rg` (ripgrep) instead of `grep`
+- `eza` instead of `ls`
+- `bat` instead of `cat`
+
+**System monitoring:**
+- `procs` instead of `ps`
+- `duf` instead of `df`
+- `btm` (bottom) instead of `top`
+
+**Navigation:**
+- `z` (zoxide) instead of `cd`
+- `br` (broot) instead of `tree`
+
+**Interactive tools:**
+- `lazygit` for git workflows
+- `lazydocker` for docker management
+
+### Integration with Existing Stack
+
+**Navi:**
+- Fallback mode uses navi search
+- Can pre-populate navi_query in response
+- User can switch to `--navi` mode explicitly
+
+**Atuin:**
+- History mode searches Atuin database
+- Can include recent commands in context (disabled by default for privacy)
+
+**FZF:**
+- Used in history fallback if Atuin unavailable
+- Interactive selection
+
+**Bat:**
+- Syntax highlighting for command preview
+- `bat --language bash --style plain --color always`
+
+**Fish:**
+- Main interface via function
+- Uses Fish's read for interactive prompts
+- Clipboard integration (pbcopy on macOS, xclip on Linux)
+
+### LLM System Prompt Structure
+
+```
+You are a LOCAL command-line translation assistant.
+
+## Your Role
+- Translate natural language to shell commands
+- Prioritize modern CLI tools (fd, rg, eza, bat, procs, duf)
+- Be concise but accurate
+- Consider context (pwd, git repo, project type)
+- All processing local - no external API calls
+
+## Response Format (JSON only)
+{
+  "command": "actual command",
+  "explanation": "brief one-line explanation",
+  "navi_query": "optional navi search query",
+  "requires_confirmation": false,
+  "confidence": 0.95
+}
+
+## Safety Rules
+- Set requires_confirmation=true for destructive ops
+- Lower confidence (<0.7) when ambiguous
+- Suggest navi when unclear
+```
+
+### Installation & Setup
+
+**Dependencies:**
+1. Python 3 (system python)
+2. PyYAML (optional, graceful degradation if missing)
+3. Ollama (brew install ollama)
+4. Recommended model: qwen2.5:0.5b (500MB, fast inference)
+
+**Setup script (`setup.sh`):**
+- Checks Python 3
+- Installs PyYAML (tries --user, --break-system-packages, brew)
+- Checks Ollama installation
+- Checks Ollama server status
+- Suggests model downloads
+- Makes translator executable
+
+**Model recommendations:**
+- qwen2.5:0.5b - Fastest, smallest, recommended (500MB)
+- gemma2:2b - More capable, slower (1.6GB)
+- llama3.2:1b - Balanced option (1.3GB)
+- phi3:mini - Microsoft's small model (2.3GB)
+
+### Usage Patterns
+
+**Quick translation:**
+```bash
+ruixen "find json files"
+# → Shows: fd --type f --extension json
+# → Asks: Run this command? [y/N/c=copy]
+```
+
+**Execute immediately:**
+```bash
+ruixen --run "show disk usage"
+# → Executes: duf
+# → No confirmation for safe commands
+```
+
+**Interactive learning:**
+```bash
+ruixen --navi "docker"
+# → Opens navi with docker cheats
+# → Fuzzy search, fill variables, run
+```
+
+**History search:**
+```bash
+ruixen --history "git stash"
+# → Searches your actual command history
+# → Shows commands you've used before
+```
+
+### Error Handling
+
+**Ollama not running:**
+- Error message: "Ollama server not responding"
+- Suggestion: "ollama serve" or "brew services start ollama"
+- Automatic fallback to navi
+
+**Model not found:**
+- Ollama returns error
+- Suggests: "ollama pull qwen2.5:0.5b"
+
+**Invalid LLM response:**
+- JSON parse error
+- Tries to extract JSON from markdown code blocks
+- Falls back to navi if extraction fails
+
+**Cache errors:**
+- Silently continues without cache
+- Logs warning to stderr
+
+### Performance Characteristics
+
+**Cold start (first query):**
+- Ollama model load: ~1-2 seconds
+- LLM inference: ~1-2 seconds
+- Total: ~2-3 seconds
+
+**Warm (cached query):**
+- Cache lookup: ~0.01 seconds
+- File read: ~0.1 seconds
+- Total: ~0.1 seconds
+
+**Fallback to navi:**
+- Instant (~0.5 seconds)
+
+**Memory usage:**
+- Python process: ~20-30MB
+- Ollama with qwen2.5:0.5b loaded: ~600MB
+
+### Troubleshooting
+
+**"Command not found: ruixen"**
+- Fish function not loaded
+- Solution: Restart Fish or `source ~/.config/fish/functions/ruixen.fish`
+
+**"Translator not found"**
+- File not at `~/.config/ruixen/translate.py`
+- Solution: `stow --restow common` or copy manually
+
+**"PyYAML not installed" warning**
+- Non-critical, uses default config
+- Solution: Run setup.sh or ignore (works fine)
+
+**Cache filling up:**
+- Solution: `rm -rf ~/.config/ruixen/cache/*`
+- Auto-cleanup: Entries expire after 1hr TTL
+
+### Extension Points
+
+**Add new tool support:**
+1. Update system prompt with tool info
+2. Add examples to prompt
+3. Test with queries: `ruixen "use new tool to do X"`
+
+**Custom safety rules:**
+Edit `config.yaml`:
+```yaml
+safety:
+  blacklisted_binaries:
+    - your-dangerous-script
+  dangerous_patterns:
+    - "custom dangerous pattern"
+```
+
+**Different model:**
+Edit `config.yaml`:
+```yaml
+llm:
+  model: gemma2:2b
+```
+
+**Adjust temperature:**
+```yaml
+llm:
+  temperature: 0.3  # More creative (0.0-1.0)
+```
+
+### Testing
+
+**Test translator directly:**
+```bash
+python3 ~/.config/ruixen/translate.py "find files with dog"
+# Returns JSON response
+```
+
+**Test with Ollama down:**
+```bash
+# Stop Ollama: brew services stop ollama
+ruixen "docker logs"
+# Should fallback to navi
+```
+
+**Test caching:**
+```bash
+ruixen "show disk usage"  # First run: slow
+ruixen "show disk usage"  # Second run: instant (cached)
+```
+
+**Verify no external calls:**
+```bash
+sudo tcpdump -i any -n 'port not 22' | grep -v localhost
+# Run: ruixen "test query"
+# Should see NO external network traffic
+```
+
+### LLM Assistant Usage
+
+When helping with ruixen:
+1. Config location: `~/.config/ruixen/config.yaml`
+2. Translator source: `~/.config/ruixen/translate.py`
+3. User manual: `~/.config/ruixen/README.md` (keep concise!)
+4. Fish function: `~/.config/fish/functions/ruixen.fish`
+5. Privacy is core principle - never suggest cloud APIs
+6. Fallback to navi is intentional safety net
+7. Context awareness improves suggestions
+8. Cache is performance optimization, not required
+9. Safety checks are regex-based, not perfect
+10. Modern CLI tools are preferred by design
+
+### Common User Tasks
+
+**Change model:**
+```bash
+vim ~/.config/ruixen/config.yaml
+# Change: model: gemma2:2b
+```
+
+**Add custom dangerous command:**
+```bash
+vim ~/.config/ruixen/config.yaml
+# Add to blacklisted_binaries: [your-script]
+```
+
+**Clear cache:**
+```bash
+rm -rf ~/.config/ruixen/cache/*
+```
+
+**Update prompt:**
+```bash
+vim ~/.config/ruixen/prompts/system.txt
+# Modify LLM instructions
+```
+
+**Test different temperature:**
+```bash
+vim ~/.config/ruixen/config.yaml
+# Change: temperature: 0.3 (0.0=deterministic, 1.0=creative)
+```

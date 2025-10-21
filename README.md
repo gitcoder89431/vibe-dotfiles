@@ -1,8 +1,11 @@
 ### Vibe-Dotfiles
 
+
 Opinionated dotfiles for a modern macOS terminal workflow. Managed with `stow`, themed with Catppuccin Mocha.## Philosophy
 
 Modern CLI tools are better than their ancient counterparts. This setup replaces `ls` with `eza`, `cat` with `bat`, `find` with `fd`, `grep` with `ripgrep`, and `cd` with `zoxide`. You get fuzzy finding, syntax highlighting, smart history, and interactive TUIs.
+
+Plus, **Ruixen** 🤖 - natural language → shell commands. 100% local, no API keys needed.
 
 ## What's Included
 
@@ -33,6 +36,7 @@ Modern CLI tools are better than their ancient counterparts. This setup replaces
 - `navi` - Interactive cheatsheet tool (150+ commands included)
 - `direnv` - Per-directory environment variables
 - `jq` - JSON processor
+- **`ruixen`** 🤖 - Natural language command translator (local LLM, no API keys)
 
 ## Screenshots
 
@@ -95,6 +99,30 @@ chsh -s /opt/homebrew/bin/fish
 - Type `lg` to open lazygit
 - Type `ld` to open lazydocker
 - Use `eza`, `bat`, `fd`, `rg` instead of old tools
+- Type `ruixen "find files with dog"` to translate natural language to commands! 🤖
+
+### Ruixen Setup (Optional)
+
+Plain English → shell commands. Runs locally, no API keys.
+
+```bash
+# Setup
+~/.config/ruixen/setup.sh
+
+# Install Ollama
+brew install ollama
+brew services start ollama
+ollama pull gemma3:1b       # Good balance (815 MB)
+# or
+ollama pull gemma3:270m     # Tiny and fast! (291 MB)
+
+# Use it
+ruixen "find files with dog in name"
+ruixen "show disk usage"
+ruixen --run "list docker containers"
+```
+
+See `~/.config/ruixen/README.md` for details.
 
 **Customize:**
 

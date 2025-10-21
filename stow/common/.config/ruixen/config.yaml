@@ -1,0 +1,178 @@
+# Ruixen Configuration
+# Natural language command translator - 100% LOCAL & PRIVATE
+# No data leaves your machine. No API keys needed.
+
+# LLM Settings (Local Only)
+llm:
+  # Ollama endpoint (local server)
+  endpoint: http://localhost:11434
+
+  # Model to use (smaller = faster)
+  # Recommended models:
+  #   - gemma3:270m   (tiny and fast! 291 MB)
+  #   - gemma3:1b     (good balance, 815 MB) ⭐ Recommended
+  #   - gemma2:2b     (more capable, 1.6 GB)
+  #   - llama3.2:1b   (also great, 1.3 GB)
+  model: gemma3:1b
+
+  # Request timeout (seconds)
+  timeout: 30
+
+  # Temperature (0.0 = deterministic, 1.0 = creative)
+  # Lower is better for command translation
+  temperature: 0.1
+
+# Execution Settings
+execution:
+  # Always preview command before running (STRONGLY RECOMMENDED)
+  preview_before_run: true
+
+  # Use bat for syntax highlighting in previews
+  use_bat_preview: true
+
+  # Timeout for command execution (seconds)
+  timeout: 30
+
+  # Show explanation with every command
+  show_explanation: true
+
+# Safety Settings
+safety:
+  # Dangerous binaries that require explicit confirmation
+  blacklisted_binaries:
+    - rm
+    - dd
+    - mkfs
+    - fdisk
+    - parted
+    - shred
+    - format
+    - diskutil
+    - sudo rm
+    - sudo dd
+
+  # Patterns that trigger danger warnings
+  dangerous_patterns:
+    - "rm -rf"
+    - "rm -fr"
+    - "dd if="
+    - "> /dev/"
+    - "chmod -R 777"
+    - "chown -R"
+    - "sudo rm"
+    - ":(){ :|:& };:" # fork bomb
+
+  # Commands that always require manual approval
+  require_manual_approval:
+    - curl.*\|.*sh
+    - wget.*\|.*sh
+    - curl.*\|.*bash
+    - wget.*\|.*bash
+    - eval
+    - exec
+
+# Integration Settings
+integrations:
+  # Use navi for interactive command selection
+  use_navi: true
+
+  # Navi query mode: 'auto' or 'manual'
+  navi_mode: auto
+
+  # Use atuin for command history search
+  use_atuin: true
+
+  # Use fzf for fuzzy selection
+  use_fzf: true
+
+# Context Settings (What info to send to LLM)
+# All data stays local - never sent to external APIs
+context:
+  # Include current directory in context
+  include_pwd: true
+
+  # Include git status if in repo
+  include_git_status: true
+
+  # Include recently used commands (from atuin)
+  # Note: These stay on your machine, never sent to cloud
+  include_recent_commands: false
+  recent_command_limit: 5
+
+  # Include basic environment info (OS, shell)
+  include_env: true
+
+  # Include project type detection (package.json, Dockerfile, etc.)
+  include_project_type: true
+
+# Output Settings
+output:
+  # Verbosity: quiet, normal, verbose
+  verbosity: normal
+
+  # Show confidence score
+  show_confidence: true
+
+  # Copy successful commands to clipboard
+  copy_to_clipboard: false
+
+  # Color output (uses your terminal theme)
+  colorize: true
+
+  # Show cache hit indicator
+  show_cache_status: true
+
+# Cache Settings (Local only - speeds up repeated queries)
+cache:
+  enabled: true
+
+  # Time to live (seconds)
+  ttl: 3600
+
+  # Max cached queries
+  max_size: 100
+
+  # Cache location
+  directory: ~/.config/ruixen/cache
+
+# Fallback Behavior (when Ollama is unavailable)
+fallback:
+  # Automatically use navi search as fallback
+  use_navi_search: true
+
+  # Use fuzzy command history search
+  use_history_search: true
+
+  # Show helpful error messages
+  suggest_alternatives: true
+
+  # Don't fail silently
+  verbose_errors: true
+
+# Privacy Settings
+privacy:
+  # Privacy-first design: All processing happens locally
+  # Your commands, history, and system info NEVER leave your machine
+
+  # Log queries locally (for debugging)
+  log_queries: false
+
+  # Log file location (if enabled)
+  log_file: ~/.config/ruixen/queries.log
+
+  # Anonymize logs (remove paths, usernames)
+  anonymize_logs: true
+
+# Performance Settings
+performance:
+  # Enable response streaming (for larger models)
+  stream_responses: false
+
+  # Number of tokens to generate
+  max_tokens: 150
+
+  # Stop sequences (when to stop generating)
+  stop_sequences:
+    - "\n\n"
+    - "User:"
+    - "Human:"
